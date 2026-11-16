@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pontis — The Bridge Oath</title>
+  <meta name="description" content="Pontis builds the bridge between who you are and the job you want: write your resume, measure it against a job post, and seal it with your oath.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 40'%3E%3Cpath d='M2 38h60M6 38V22M58 38V22M2 22h60M10 22a22 22 0 0 1 44 0' fill='none' stroke='%23b0802f' stroke-width='4'/%3E%3C/svg%3E">
+</head>
+<body>
+  <header class="topbar no-print">
+    <div class="brand">
+      <svg class="logo" viewBox="0 0 64 40" aria-hidden="true"><path d="M2 38h60M6 38V22M58 38V22M2 22h60M10 22a22 22 0 0 1 44 0M22 22v16M32 22v16M42 22v16" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
+      <div>
+        <h1>Pontis</h1>
+        <p class="motto">Sacramentum Pontis · the bridge oath</p>
+      </div>
+    </div>
+    <nav class="tabs" role="tablist">
+      <button role="tab" data-tab="forge" aria-selected="true">I · Forge</button>
+      <button role="tab" data-tab="bridge" aria-selected="false">II · Bridge</button>
+      <button role="tab" data-tab="oath" aria-selected="false">III · Oath</button>
+    </nav>
+  </header>
+
+  <main class="layout">
+    <section class="panel no-print">
+      <!-- I · FORGE -->
+      <div class="tab-pane" id="tab-forge">
+        <p class="lede">Lay the stones of your bridge — who you are, where you've been, what you can do.</p>
+
+        <fieldset>
+          <legend>Identity</legend>
+          <div class="grid2">
+            <label>Full name<input data-field="name" placeholder="Marcus Aurelius"></label>
+            <label>Headline<input data-field="title" placeholder="Product Designer"></label>
+            <label>Email<input data-field="email" type="email" placeholder="you@example.com"></label>
+            <label>Phone<input data-field="phone" placeholder="+1 555 0100"></label>
+            <label>Location<input data-field="location" placeholder="Rome, Italy"></label>
+            <label>Website / LinkedIn<input data-field="website" placeholder="linkedin.com/in/you"></label>
+          </div>
+          <label>Summary<textarea data-field="summary" rows="4" placeholder="Two or three sentences on the value you bring."></textarea></label>
+        </fieldset>
+
+        <fieldset>
+          <legend>Experience</legend>
+          <div id="experience-list"></div>
+          <button class="ghost" data-add="experience">+ Add position</button>
+        </fieldset>
+
+        <fieldset>
+          <legend>Education</legend>
+          <div id="education-list"></div>
+          <button class="ghost" data-add="education">+ Add education</button>
+        </fieldset>
+
+        <fieldset>
+          <legend>Skills</legend>
+          <label>Comma-separated<textarea data-field="skills" rows="3" placeholder="Figma, user research, SQL, leadership"></textarea></label>
+        </fieldset>
+
+        <fieldset>
+          <legend>Appearance</legend>
+          <div class="template-picker">
+            <label class="chip-radio"><input type="radio" name="template" value="forum" checked> Forum <small>classic serif</small></label>
+            <label class="chip-radio"><input type="radio" name="template" value="aqueduct"> Aqueduct <small>modern sidebar</small></label>
+            <label class="chip-radio"><input type="radio" name="template" value="tablet"> Tablet <small>minimal</small></label>
+          </div>
+        </fieldset>
+
+        <div class="row-actions">
+          <button class="ghost" id="load-sample">Load example</button>
+          <button class="ghost" id="export-json">Save .json</button>
+          <label class="ghost file-btn">Open .json<input type="file" id="import-json" accept="application/json" hidden></label>
+          <button class="ghost danger" id="reset">Clear all</button>
+        </div>
+      </div>
+
+      <!-- II · BRIDGE -->
+      <div class="tab-pane" id="tab-bridge" hidden>
+        <p class="lede">Paste the job you want. Pontis measures how far your resume reaches across — and which stones are missing.</p>
+        <label>Job description<textarea id="jd" rows="10" placeholder="Paste the full job posting here…"></textarea></label>
+        <button class="primary" id="analyze">Measure the bridge</button>
+
+        <div id="bridge-result" hidden>
+          <div class="score-card">
+            <svg viewBox="0 0 200 110" class="arch-meter" aria-hidden="true">
+              <path d="M20 100 A80 80 0 0 1 180 100" class="arch-track"/>
+              <path d="M20 100 A80 80 0 0 1 180 100" class="arch-fill" id="arch-fill"/>
+            </svg>
+            <div class="score-num"><span id="score">0</span>%</div>
+            <div class="score-label" id="score-label">span complete</div>
+          </div>
+
+          <h3>Stones in place</h3>
+          <p class="hint">Keywords from the job that already appear in your resume.</p>
+          <div class="chips" id="matched"></div>
+
+          <h3>Missing stones</h3>
+          <p class="hint">Click a keyword to add it to your skills — only if it's true of you.</p>
+          <div class="chips" id="missing"></div>
+
+          <h3>Mason's notes</h3>
+          <ul class="notes" id="notes"></ul>
+        </div>
+      </div>
+
+      <!-- III · OATH -->
+      <div class="tab-pane" id="tab-oath" hidden>
+        <p class="lede">In Rome an oath — <em>sacramentum</em> — bound a soldier to his word. Seal your resume with one.</p>
+        <blockquote class="oath-text" id="oath-text">
+          I swear that every line on this page is true. I claim no skill I do not hold, no title I did not earn, and no deed I did not do. What I promise here, I will deliver.
+        </blockquote>
+        <label>Your personal pledge to the next employer <small>(optional — appears on the resume)</small>
+          <textarea data-field="pledge" rows="3" placeholder="e.g. In my first 90 days I will ship a measurable improvement to your onboarding funnel."></textarea>
+        </label>
+        <label class="check"><input type="checkbox" id="oath-check"> I take the bridge oath.</label>
+        <label>Sign with your name<input id="oath-sign" placeholder="Type your full name"></label>
+        <button class="primary" id="seal" disabled>Seal the oath</button>
+        <p class="sealed-msg" id="sealed-msg" hidden></p>
+        <hr>
+        <button class="primary" id="print">Download as PDF</button>
+        <p class="hint">Opens your browser's print dialog — choose “Save as PDF”.</p>
+      </div>
+    </section>
+
+    <section class="preview-wrap">
+      <div class="preview-toolbar no-print">
+        <span>Live preview</span>
+        <span class="saved" id="saved">Saved</span>
+      </div>
+      <article class="resume" id="resume"></article>
+    </section>
+  </main>
+
+  <template id="tpl-experience">
+    <div class="entry">
+      <div class="grid2">
+        <label>Role<input data-k="role"></label>
+        <label>Company<input data-k="company"></label>
+        <label>Start<input data-k="start" placeholder="2021"></label>
+        <label>End<input data-k="end" placeholder="Present"></label>
+      </div>
+      <label>Achievements <small>(one per line)</small><textarea data-k="bullets" rows="4"></textarea></label>
+      <div class="entry-actions">
+        <button class="mini" data-move="-1" title="Move up">↑</button>
+        <button class="mini" data-move="1" title="Move down">↓</button>
+        <button class="mini danger" data-remove title="Remove">Remove</button>
+      </div>
+    </div>
+  </template>
+
+  <template id="tpl-education">
+    <div class="entry">
+      <div class="grid2">
+        <label>Degree<input data-k="degree"></label>
+        <label>School<input data-k="school"></label>
+        <label>Year<input data-k="year"></label>
+        <label>Notes<input data-k="notes" placeholder="Honours, GPA…"></label>
+      </div>
+      <div class="entry-actions">
+        <button class="mini" data-move="-1" title="Move up">↑</button>
+        <button class="mini" data-move="1" title="Move down">↓</button>
+        <button class="mini danger" data-remove title="Remove">Remove</button>
+      </div>
+    </div>
+  </template>
+
+  <script src="analyzer.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
